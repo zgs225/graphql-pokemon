@@ -10,6 +10,11 @@ type Attack {
   damage: Int
 }
 
+# Create or update pokemon
+type Mutation {
+  updatePokemon(id: String!, name: String!): Pokemon
+}
+
 # Represents a Pokémon
 type Pokemon {
   # The ID of an object

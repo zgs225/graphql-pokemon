@@ -1,4 +1,6 @@
 import pokemons from '../pokemons/pokemons.json';
+import * as fsPromises from 'fs/promises';
+import path from 'path';
 
 export async function getPokemons(args) {
   const searchedPokemons = pokemons.slice(0, args.first);
@@ -6,6 +8,22 @@ export async function getPokemons(args) {
   // const edges = searchedPokemons.map(pokemon => ({ node: pokemon }));
 
   return searchedPokemons || null;
+}
+
+export async function updatePokemonByID(pokemonId, name) {
+  let idx = pokemons.findIndex(pokemon => {
+    return pokemon.id == pokemonId
+  });
+
+  if (idx < 0) {
+    throw new Error(`Pokemon by ID ${pokemonId} not found`);
+  }
+
+  pokemons[idx].name = name;
+
+  await fsPromises.writeFile(path.join(__dirname, '../pokemons/pokemons.json'), JSON.stringify(pokemons, null, 2));
+
+  return pokemons[idx] || null;
 }
 
 export async function getPokemonById(pokemonId) {
